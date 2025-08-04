@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './users.entity';
+import { Model } from 'mongoose';
+import { User as UserSchema } from '../schemas/user.schema'
+import { InjectModel } from '@nestjs/mongoose';
 
 
 const users: User[] = [
@@ -9,6 +12,11 @@ const users: User[] = [
 
 @Injectable()
 export class UsersService {
+    constructor(@InjectModel(UserSchema.name) private userModel: Model<UserSchema>){
+
+    }
+
+
     async findUserByEmail(email: string): Promise<User | undefined> {
         return users.find(user => user.email === email);
     }
@@ -19,6 +27,10 @@ export class UsersService {
             email,
             password
         };
+        const db_user = new this.userModel(newUser);
+        console.log(db_user)
+        await db_user.save();
+
         users.push(newUser);
         return newUser;
     }
