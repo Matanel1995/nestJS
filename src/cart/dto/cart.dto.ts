@@ -1,4 +1,4 @@
-import { IsString, IsEmail, MinLength, IsNumber, IsBoolean, Min } from 'class-validator';
+import { IsNumber } from 'class-validator';
 
 export class CartDto {
   @IsNumber()

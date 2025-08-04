@@ -1,36 +1,35 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, ValidationPipe, Put, Delete } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { CartDto } from './dto/cart.dto';
-import { ProductsService } from 'src/products/products.service';
 import { CartProduct } from './cart.entity';
 
 @Controller('cart')
 export class CartController {
-    constructor(private cartService: CartService, private productService: ProductsService) {}
+    constructor(private cartService: CartService) {}
     
     @Get()
-    getCart() {
+    public getCart(): CartProduct[] {
         // This method would return the all products in the cart 
         return this.cartService.getcart();
     }
 
     @Post(":productId")
-    addProduct(@Param('productId', ParseIntPipe) productId: number ,@Body(new ValidationPipe()) cartDto: CartDto){
+    public addProduct(@Param('productId', ParseIntPipe) productId: number ,@Body(new ValidationPipe()) cartDto: CartDto): CartProduct[]{
         return this.cartService.addProductToCart(productId, cartDto);
     }
 
     @Put(":productId")
-    updateCart(@Param('productId', ParseIntPipe) productId: number, @Body(new ValidationPipe()) cartDto: CartDto){
+    public updateCart(@Param('productId', ParseIntPipe) productId: number, @Body(new ValidationPipe()) cartDto: CartDto): CartProduct[]{
         return this.cartService.updateCart(productId, cartDto);
     }
 
     @Delete(':productId')
-    deleteProduct(@Param('productId', ParseIntPipe) productId: number) {
+    public deleteProduct(@Param('productId', ParseIntPipe) productId: number): CartProduct[] {
         return this.cartService.deleteProductFromCart(productId);
     }
 
     @Delete()
-    clearCart() {
+    public clearCart(): void {
         this.cartService.clearCart();
     }
 
